@@ -1,10 +1,10 @@
 locals {
-  vpc_id             = data.terraform_remote_state.existing_resources.outputs.vpc_id
-  public_subnet_ids  = data.terraform_remote_state.existing_resources.outputs.public_subnet_ids
-  private_subnet_ids = data.terraform_remote_state.existing_resources.outputs.private_subnet_ids
-  api_id             = data.terraform_remote_state.existing_resources.outputs.api_gateway_id
-  api_endpoint       = data.terraform_remote_state.existing_resources.outputs.api_gateway_endpoint
-  api_execution_arn  = data.terraform_remote_state.existing_resources.outputs.api_gateway_execution_arn
+  vpc_id             = data.terraform_remote_state.network.outputs.vpc_id
+  public_subnet_ids  = data.terraform_remote_state.network.outputs.public_subnet_ids
+  private_subnet_ids = data.terraform_remote_state.network.outputs.private_subnet_ids
+  api_id             = data.terraform_remote_state.api_gateway.outputs.api_gateway_id
+  api_endpoint       = data.terraform_remote_state.api_gateway.outputs.api_gateway_endpoint
+  api_execution_arn  = data.terraform_remote_state.api_gateway.outputs.api_gateway_execution_arn
 }
 
 module "database" {
