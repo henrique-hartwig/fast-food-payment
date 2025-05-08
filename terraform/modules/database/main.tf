@@ -8,8 +8,8 @@ resource "aws_db_subnet_group" "subnet_group_fast_food_payments" {
   }
 }
 
-resource "aws_security_group" "security_group_fast_food_payments" {
-  name        = "fast-food-payments-sg-${var.environment}"
+resource "aws_security_group" "security_group_fast_food_payment" {
+  name        = "fast-food-payments-db-sg-${var.environment}"
   description = "Allow database traffic for Payment microservice"
   vpc_id      = var.vpc_id
 
@@ -50,7 +50,7 @@ resource "aws_db_instance" "db_fast_food_payments" {
   port                   = var.db_port
   password               = var.db_password
   db_subnet_group_name   = aws_db_subnet_group.subnet_group_fast_food_payments.name
-  vpc_security_group_ids = [aws_security_group.security_group_fast_food_payments.id]
+  vpc_security_group_ids = [aws_security_group.security_group_fast_food_payment.id]
   skip_final_snapshot    = true
   deletion_protection    = var.environment == "prod" ? true : false
   backup_retention_period = var.environment == "prod" ? 14 : 7
