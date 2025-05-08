@@ -1,10 +1,10 @@
 locals {
-  vpc_id             = data.terraform_remote_state.fastfood_orders.resources.module.module.network.vpc_id
-  public_subnet_ids  = data.terraform_remote_state.fastfood_orders.resources.module.module.network.public_subnet_ids
-  private_subnet_ids = data.terraform_remote_state.fastfood_orders.resources.module.module.network.private_subnet_ids
-  api_id             = data.terraform_remote_state.fastfood_orders.resources.module.module.api_gateway.api_gateway_id
-  api_endpoint       = data.terraform_remote_state.fastfood_orders.resources.module.module.api_gateway.api_gateway_endpoint
-  api_execution_arn  = data.terraform_remote_state.fastfood_orders.resources.module.module.api_gateway.api_gateway_execution_arn
+  vpc_id             = data.terraform_remote_state.fastfood_orders.outputs.vpc_id
+  public_subnet_ids  = data.terraform_remote_state.fastfood_orders.outputs.public_subnet_ids
+  private_subnet_ids = data.terraform_remote_state.fastfood_orders.outputs.private_subnet_ids
+  api_id             = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
+  api_endpoint       = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_url
+  api_execution_arn  = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_execution_arn
 }
 
 module "database" {
