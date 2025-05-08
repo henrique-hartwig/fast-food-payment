@@ -1,5 +1,5 @@
 resource "aws_security_group" "lambda_sg" {
-  name        = "${var.lambda_name}-sg-${var.environment}"
+  name        = "${var.lambda_name}-lambda-sg-${var.environment}"
   description = "Security group for the ${var.lambda_name} Lambda function"
   vpc_id      = var.vpc_id
 

@@ -9,7 +9,7 @@ resource "aws_db_subnet_group" "subnet_group_fast_food_payments" {
 }
 
 resource "aws_security_group" "security_group_fast_food_payments" {
-  name        = "fast-food-payments-db-sg-${var.environment}"
+  name        = "fast-food-payments-sg-${var.environment}"
   description = "Allow database traffic for Payment microservice"
   vpc_id      = var.vpc_id
 
