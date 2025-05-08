@@ -10,12 +10,11 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  DB_HOST: fast-food-orders-db-dev.cjg0oioy0rgq.us-east-1.rds.amazonaws.com
-  DB_NAME: fast_food_orders
+  DB_NAME: fast_food_payments
   DB_PORT: 5432
   DB_USER: postgres
   DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DATABASE_URL: postgresql://postgres:${{ secrets.DB_PASSWORD }}@fast-food-orders-db-dev.cjg0oioy0rgq.us-east-1.rds.amazonaws.com:5432/fast_food_orders?schema=public
+  DATABASE_URL: postgresql://postgres:${{ secrets.DB_PASSWORD }}@fast-food-payments-db-dev.cjg0oioy0rgq.us-east-1.rds.amazonaws.com:5432/fast_food_payments?schema=public
 
 jobs:
   terraform-validate:
@@ -29,38 +28,23 @@ jobs:
       - name: Install Pipeline dependencies
         run: npm ci
 
-      - name: Install Lambda Layer dependencies
-        working-directory: terraform/modules/lambda_layer/dependencies/nodejs
+      - name: Install Lambda Layer
+        working-directory: terraform/modules/lambda_layer/nodejs
         run: |
           npm install
 
-      - name: Generate Prisma Client Lambda Layer
-        working-directory: terraform/modules/lambda_layer/
+      - name: Generate Lambda Layer zip file
+        working-directory: terraform/modules/lambda_layer/nodejs
         run: |
-          npx prisma generate --schema=../../../src/database/prisma/schema.prisma
-
-      - name: Generate Dependencies Lambda Layer zip file
-        working-directory: terraform/modules/lambda_layer/dependencies
-        run: |
-          zip -rq fastfood-lambda-layer.zip nodejs
-          echo "Dependencies Lambda Layer generated in fastfood-lambda-layer.zip"
-          echo "Size of the zip file: $(du -h fastfood-lambda-layer.zip | cut -f1)"
-
-      - name: Generate Prisma Lambda Layer zip file
-        working-directory: terraform/modules/lambda_layer/prisma
-        run: |
-          zip -rq fastfood-lambda-layer-prisma.zip nodejs
-          echo "Prisma Lambda Layer generated in fastfood-lambda-layer-prisma.zip"
-          echo "Size of the zip file: $(du -h fastfood-lambda-layer-prisma.zip | cut -f1)"
+          zip -rq fastfood-payment-lambda-layer.zip nodejs
+          echo "Lambda Layer generated in fastfood-payment-lambda-layer.zip"
+          echo "Size of the zip file: $(du -h fastfood-payment-lambda-layer.zip | cut -f1)"
 
       - name: Build application
         run: npm run build
 
       - name: Package Lambda functions
         run: npm run package:lambda
-
-      - name: Prisma Migrate
-        run: npx prisma migrate dev --schema=./src/database/prisma/schema.prisma
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4

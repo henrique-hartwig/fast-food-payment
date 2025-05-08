@@ -3,7 +3,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "Fast Food Orders Microservice"
+      Project     = "Fast Food Payment Microservice"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }
@@ -21,6 +21,15 @@ terraform {
   }
 
   backend "s3" {
+    bucket = "fastfood-payment-terraform-state"
+    key    = "infra/state.tfstate"
+    region = "us-east-1"
+  }
+}
+
+data "terraform_remote_state" "existing_resources" {
+  backend = "s3"
+  config = {
     bucket = "fastfood-orders-terraform-state"
     key    = "infra/state.tfstate"
     region = "us-east-1"

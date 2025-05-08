@@ -1,16 +1,16 @@
 resource "aws_db_subnet_group" "subnet_group_fast_food_orders" {
-  name       = "fast-food-orders-subnet-group-${var.environment}"
+  name       = "fast-food-payment-subnet-group-${var.environment}"
   subnet_ids = var.subnet_ids
 
   tags = {
-    Name        = "Fast Food Orders DB Subnet Group"
+    Name        = "Fast Food Payment DB Subnet Group"
     Environment = var.environment
   }
 }
 
 resource "aws_security_group" "security_group_fast_food_orders" {
-  name        = "fast-food-orders-sg-${var.environment}"
-  description = "Allow database traffic for Orders microservice"
+  name        = "fast-food-payment-sg-${var.environment}"
+  description = "Allow database traffic for Payment microservice"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -28,13 +28,13 @@ resource "aws_security_group" "security_group_fast_food_orders" {
   }
 
   tags = {
-    Name        = "Fast Food Orders RDS Security Group"
+    Name        = "Fast Food Payment RDS Security Group"
     Environment = var.environment
   }
 }
 
-resource "aws_db_instance" "db_fast_food_orders" {
-  identifier             = "fast-food-orders-db-${var.environment}"
+resource "aws_db_instance" "db_fast_food_payments" {
+  identifier             = "fast-food-payment-db-${var.environment}"
   engine                 = "postgres"
   engine_version         = "14"
   instance_class         = var.db_instance_class
@@ -52,7 +52,34 @@ resource "aws_db_instance" "db_fast_food_orders" {
   backup_retention_period = var.environment == "prod" ? 14 : 7
   publicly_accessible    = true
   tags = {
-    Name        = "Fast Food Orders Database"
+    Name        = "Fast Food Payment Database"
+    Environment = var.environment
+  }
+}
+
+resource "aws_dynamodb_table" "db_fast_food_payments" {
+  name         = "fast-food-payments-db-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name               = "orderId-index"
+    hash_key           = "orderId"
+    projection_type    = "ALL"
+  }
+
+  attribute {
+    name = "orderId"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "Fast Food Payment Database"
     Environment = var.environment
   }
 }
