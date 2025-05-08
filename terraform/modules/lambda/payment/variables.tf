@@ -29,13 +29,13 @@ variable "subnet_ids" {
 variable "lambda_name" {
   description = "Base name of the Lambda function"
   type        = string
-  default     = "fast-food-product-category"
+  default     = "fast-food-payment"
 }
 
 variable "lambda_description" {
   description = "Description of the Lambda function"
   type        = string
-  default     = "Lambda function to manage product categories"
+  default     = "Lambda function to manage payments"
 }
 
 variable "tags" {
