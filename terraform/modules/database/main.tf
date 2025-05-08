@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "subnet_group_fast_food_payments" {
   name       = "fast-food-payment-subnet-group-${var.environment}"
-  subnet_ids = data.terraform_remote_state.existing_resources.outputs.public_subnets
+  subnet_ids = var.subnet_ids
 
   tags = {
     Name        = "Fast Food Payments DB Subnet Group"
@@ -11,7 +11,7 @@ resource "aws_db_subnet_group" "subnet_group_fast_food_payments" {
 resource "aws_security_group" "security_group_fast_food_payments" {
   name        = "fast-food-payment-sg-${var.environment}"
   description = "Allow database traffic for Payment microservice"
-  vpc_id      = data.terraform_remote_state.existing_resources.outputs.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 5432
