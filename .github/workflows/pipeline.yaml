@@ -28,14 +28,10 @@ jobs:
       - name: Install Pipeline dependencies
         run: npm ci
 
-      - name: Install Lambda Layer
-        working-directory: terraform/modules/lambda_layer/nodejs
-        run: |
-          npm install
-
       - name: Generate Lambda Layer zip file
         working-directory: terraform/modules/lambda_layer/nodejs
         run: |
+          npm install
           zip -rq fastfood-payment-lambda-layer.zip nodejs
           echo "Lambda Layer generated in fastfood-payment-lambda-layer.zip"
           echo "Size of the zip file: $(du -h fastfood-payment-lambda-layer.zip | cut -f1)"
