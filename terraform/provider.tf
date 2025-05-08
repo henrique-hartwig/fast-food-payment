@@ -27,7 +27,7 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "existing_resources" {
+data "terraform_remote_state" "fastfood_orders" {
   backend = "s3"
   config = {
     bucket = "fastfood-orders-terraform-state"
