@@ -13,7 +13,7 @@ variable "db_instance_class" {
 variable "db_name" {
   type        = string
   description = "Database name"
-  default     = "fast-food-orders"
+  default     = "fast_food_payments"
 }
 
 variable "db_username" {

@@ -1,17 +1,17 @@
-resource "aws_db_subnet_group" "subnet_group_fast_food_orders" {
+resource "aws_db_subnet_group" "subnet_group_fast_food_payments" {
   name       = "fast-food-payment-subnet-group-${var.environment}"
-  subnet_ids = var.subnet_ids
+  subnet_ids = data.terraform_remote_state.existing_resources.outputs.public_subnets
 
   tags = {
-    Name        = "Fast Food Payment DB Subnet Group"
+    Name        = "Fast Food Payments DB Subnet Group"
     Environment = var.environment
   }
 }
 
-resource "aws_security_group" "security_group_fast_food_orders" {
+resource "aws_security_group" "security_group_fast_food_payments" {
   name        = "fast-food-payment-sg-${var.environment}"
   description = "Allow database traffic for Payment microservice"
-  vpc_id      = var.vpc_id
+  vpc_id      = data.terraform_remote_state.existing_resources.outputs.vpc_id
 
   ingress {
     from_port   = 5432
@@ -45,14 +45,14 @@ resource "aws_db_instance" "db_fast_food_payments" {
   username               = var.db_username
   port                   = var.db_port
   password               = var.db_password
-  db_subnet_group_name   = aws_db_subnet_group.subnet_group_fast_food_orders.name
-  vpc_security_group_ids = [aws_security_group.security_group_fast_food_orders.id]
+  db_subnet_group_name   = aws_db_subnet_group.subnet_group_fast_food_payments.name
+  vpc_security_group_ids = [aws_security_group.security_group_fast_food_payments.id]
   skip_final_snapshot    = true
   deletion_protection    = var.environment == "prod" ? true : false
   backup_retention_period = var.environment == "prod" ? 14 : 7
   publicly_accessible    = true
   tags = {
-    Name        = "Fast Food Payment Database"
+    Name        = "Fast Food Payments Database"
     Environment = var.environment
   }
 }

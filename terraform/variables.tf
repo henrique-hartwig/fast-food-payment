@@ -1,5 +1,5 @@
 variable "aws_region" {
-  description = "The AWS region to deploy the FastFood Orders microservice."
+  description = "The AWS region to deploy the FastFood Payments microservice."
   type        = string
   default     = "us-east-1"
 }
@@ -25,7 +25,7 @@ variable "lambda_timeout" {
 variable "api_name" {
   description = "Name of the API Gateway"
   type        = string
-  default     = "fastfood-orders-api"
+  default     = "fastfood-payments-api"
 }
 
 variable "db_instance_class" {
@@ -37,7 +37,7 @@ variable "db_instance_class" {
 variable "db_name" {
   description = "Name of the database"
   type        = string
-  default     = "fast_food_orders"
+  default     = "fast_food_payments"
 }
 
 variable "db_username" {
@@ -85,7 +85,7 @@ variable "availability_zones" {
 variable "api_description" {
   description = "Description of the API Gateway"
   type        = string
-  default     = "API Gateway for Fast Food Orders"
+  default     = "API Gateway for Fast Food Payments"
 }
 
 variable "database_url" {
