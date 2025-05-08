@@ -31,6 +31,10 @@ resource "aws_security_group" "security_group_fast_food_payments" {
     Name        = "Fast Food Payment RDS Security Group"
     Environment = var.environment
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_db_instance" "db_fast_food_payments" {
