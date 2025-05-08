@@ -24,7 +24,7 @@ module "payment" {
   source = "./modules/lambda/payment"
 
   environment        = var.environment
-  database_url       = var.database_url
+  database_url       = module.database.db_instance_endpoint
   vpc_id             = local.vpc_id
   subnet_ids         = local.private_subnet_ids
   lambda_memory_size = var.lambda_memory_size

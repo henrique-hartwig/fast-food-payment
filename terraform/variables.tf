@@ -87,8 +87,3 @@ variable "api_description" {
   type        = string
   default     = "API Gateway for Fast Food Payments"
 }
-
-variable "database_url" {
-  description = "Database URL"
-  type        = string
-}
