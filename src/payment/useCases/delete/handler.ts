@@ -3,7 +3,7 @@ import { PaymentService } from '../../domain/service';
 import { DbPaymentRepository } from '../../domain/database';
 import { DeletePaymentController } from './controller';
 import logger from '../../../utils/logger';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb/dist-types/DynamoDBClient';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {

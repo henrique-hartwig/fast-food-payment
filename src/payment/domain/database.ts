@@ -1,11 +1,12 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand, GetCommand, QueryCommand, UpdateCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, GetCommand, QueryCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { Payment } from './entity';
 import { PaymentRepository } from './repository';
 
 export class DbPaymentRepository implements PaymentRepository {
-  private tableName = process.env.PAYMENTS_TABLE || `fast-food-payments-db-${process.env.ENVIRONMENT}`;
+  private tableName = process.env.TABLE_NAME || `fast-food-payments-db-${process.env.ENVIRONMENT}`;
+
   constructor(private readonly ddb: DynamoDBDocumentClient) {}
+
   async create(payment: Payment): Promise<Payment> {
     await this.ddb.send(new PutCommand({
       TableName: this.tableName,

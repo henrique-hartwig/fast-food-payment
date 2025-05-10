@@ -3,7 +3,7 @@ import { PaymentGateway, CreatePaymentDTO, PaymentResponse, PaymentStatusRespons
 import { PaymentService } from '../domain/service';
 import { UpdatePaymentController } from '../useCases/update/controller';
 import { PaymentStatus } from '../domain/entity';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb/dist-types/DynamoDBClient';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 export class MercadoPagoGateway implements PaymentGateway {
