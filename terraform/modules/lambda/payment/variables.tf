@@ -49,7 +49,7 @@ variable "lambda_layers" {
   type        = list(string)
 }
 
-variable "database_url" {
-  description = "Database URL"
+variable "table_name" {
+  description = "Table name"
   type        = string
 }

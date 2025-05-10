@@ -28,36 +28,6 @@ variable "api_name" {
   default     = "fastfood-payments-api"
 }
 
-variable "db_instance_class" {
-  description = "RDS instance class for the database"
-  type        = string
-  default     = "db.t3.micro"
-}
-
-variable "db_name" {
-  description = "Name of the database"
-  type        = string
-  default     = "fast_food_payments"
-}
-
-variable "db_username" {
-  description = "Username for the database"
-  type        = string
-  sensitive   = true
-}
-
-variable "db_password" {
-  description = "Password for the database"
-  type        = string
-  sensitive   = true
-}
-
-variable "db_port" {
-  description = "Port for the database"
-  type        = number
-  default     = 5432
-}
-
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string

@@ -65,6 +65,7 @@ resource "aws_lambda_function" "payment_functions" {
   environment {
     variables = {
       NODE_ENV     = var.environment
+      TABLE_NAME   = var.table_name
     }
   }
 

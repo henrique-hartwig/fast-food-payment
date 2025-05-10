@@ -1,9 +1,4 @@
-output "db_instance_endpoint" {
-  value       = aws_db_instance.db_fast_food_payments.endpoint
-  description = "Database endpoint"
-}
-
-output "db_instance_address" {
-  value       = aws_db_instance.db_fast_food_payments.address
-  description = "Database address"
+output "dynamodb_table_payments_name" {
+  value       = aws_dynamodb_table.db_fast_food_payments.name
+  description = "Nome da tabela DynamoDB de pagamentos"
 }

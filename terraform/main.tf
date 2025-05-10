@@ -8,23 +8,15 @@ locals {
 }
 
 module "database" {
-  source = "./modules/database"
-
-  environment       = var.environment
-  db_instance_class = var.db_instance_class
-  db_name           = var.db_name
-  db_username       = var.db_username
-  db_password       = var.db_password
-  db_port           = var.db_port
-  vpc_id            = local.vpc_id
-  subnet_ids        = local.public_subnet_ids
+  source      = "./modules/database"
+  environment = var.environment
 }
 
 module "payment" {
   source = "./modules/lambda/payment"
 
   environment        = var.environment
-  database_url       = module.database.db_instance_endpoint
+  table_name         = module.database.dynamodb_table_payments_name
   vpc_id             = local.vpc_id
   subnet_ids         = local.private_subnet_ids
   lambda_memory_size = var.lambda_memory_size
