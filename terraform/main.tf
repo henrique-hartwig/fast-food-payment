@@ -3,6 +3,7 @@ locals {
   public_subnet_ids  = data.terraform_remote_state.fastfood_orders.outputs.public_subnet_ids
   private_subnet_ids = data.terraform_remote_state.fastfood_orders.outputs.private_subnet_ids
   api_gateway_id     = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
+  api_gateway_arn    = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_arn
 }
 
 module "database" {
@@ -30,7 +31,8 @@ module "lambda_layer" {
 }
 
 module "api_gateway_routes" {
-  source = "./modules/api_gateway"
+  source          = "./modules/api_gateway"
   payment_lambdas = module.payment.lambda_functions
   api_gateway_id  = local.api_gateway_id
+  api_gateway_arn = local.api_gateway_arn
 }
