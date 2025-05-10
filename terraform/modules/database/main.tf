@@ -5,7 +5,7 @@ resource "aws_dynamodb_table" "db_fast_food_payments" {
 
   attribute {
     name = "id"
-    type = "S"
+    type = "N"
   }
 
   global_secondary_index {
