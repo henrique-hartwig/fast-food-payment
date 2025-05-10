@@ -16,7 +16,7 @@ resource "aws_dynamodb_table" "db_fast_food_payments" {
 
   attribute {
     name = "orderId"
-    type = "S"
+    type = "N"
   }
 
   tags = {
