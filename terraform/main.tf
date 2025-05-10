@@ -2,9 +2,7 @@ locals {
   vpc_id             = data.terraform_remote_state.fastfood_orders.outputs.vpc_id
   public_subnet_ids  = data.terraform_remote_state.fastfood_orders.outputs.public_subnet_ids
   private_subnet_ids = data.terraform_remote_state.fastfood_orders.outputs.private_subnet_ids
-  api_id             = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
-  api_endpoint       = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_url
-  api_execution_arn  = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_execution_arn
+  api_gateway_id     = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
 }
 
 module "database" {
@@ -29,4 +27,10 @@ module "payment" {
 
 module "lambda_layer" {
   source = "./modules/lambda_layer"
+}
+
+module "api_gateway_routes" {
+  source = "./modules/api_gateway"
+  payment_lambdas = module.payment.lambda_functions
+  api_gateway_id  = local.api_gateway_id
 }
