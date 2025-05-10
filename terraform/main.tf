@@ -3,7 +3,7 @@ locals {
   public_subnet_ids  = data.terraform_remote_state.fastfood_orders.outputs.public_subnet_ids
   private_subnet_ids = data.terraform_remote_state.fastfood_orders.outputs.private_subnet_ids
   api_gateway_id     = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
-  api_gateway_arn    = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_arn
+  api_gateway_arn    = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_execution_arn
 }
 
 module "database" {
