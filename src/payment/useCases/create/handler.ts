@@ -9,7 +9,6 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION,
-    endpoint: process.env.DB_HOST,
   });
   const ddb = DynamoDBDocumentClient.from(client);
 
