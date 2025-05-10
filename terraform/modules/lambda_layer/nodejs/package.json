@@ -17,5 +17,8 @@
     "@aws-sdk/lib-dynamodb": "^3.804.0",
     "winston": "^3.10.0",
     "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119"
   }
 }
