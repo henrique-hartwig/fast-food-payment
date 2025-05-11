@@ -64,6 +64,24 @@ describe('Get Payment Lambda', () => {
     });
   });
 
+  it('should return 404 if payment not found', async () => {
+    const event = {
+      pathParameters: {
+        id: 123,
+      },
+    } as any;
+
+    mockPaymentGet.mockResolvedValue({
+      Item: null
+    });
+
+    const result = await handler(event);
+
+    expect(result.statusCode).toBe(404);
+    const body = JSON.parse(result.body);
+    expect(body.message).toBe('Payment not found');
+  });
+
   it('should return 400 if paymentId is not sent', async () => {
     const event = {
       pathParameters: {

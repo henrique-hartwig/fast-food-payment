@@ -29,6 +29,14 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     const result = await paymentController.handle({ id: Number(paymentId) });
 
+    if (!result) {
+      return {
+        statusCode: 404,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Payment not found' })
+      };
+    }
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
