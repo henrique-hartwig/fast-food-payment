@@ -119,6 +119,15 @@ describe('Update Payment Lambda', () => {
     expect(mockPaymentUpdate).not.toHaveBeenCalled();
   });
 
+  it('should return 400 when status is invalid', async () => {
+    const event = {
+      pathParameters: { id: '123' },
+      body: JSON.stringify({ status: 'invalid' })
+    } as any;
+    const result = await handler(event);
+    expect(result.statusCode).toBe(400);
+  });
+
   it('should return 500 for generic errors', async () => {
     const event = {
       pathParameters: { id: 123 },

@@ -63,32 +63,32 @@ describe('List Payment Lambda', () => {
     expect(result.statusCode).toBe(200);
   });
 
-  // it('should fail when limit is not sent', async () => {
-  //   const event = {
-  //     queryStringParameters: {},
-  //   } as any;
+  it('should return 400 when limit is not sent', async () => {
+    const event = {
+      queryStringParameters: {},
+    } as any;
 
-  //   const result = await handler(event);
+    const result = await handler(event);
 
-  //   expect(result.statusCode).toBe(400);
-  //   expect(result.body).toContain('Query parameters are required');
-  //   expect(mockPaymentList).not.toHaveBeenCalled();
-  // });
+    expect(result.statusCode).toBe(400);
+    expect(result.body).toContain('Query parameters are required');
+    expect(mockPaymentList).not.toHaveBeenCalled();
+  });
 
-  // it('should return 500 when an unexpected error occurs', async () => {
-  //   const event = {
-  //     queryStringParameters: {
-  //       limit: 10,
-  //     },
-  //   } as any;
+  it('should return 500 when an unexpected error occurs', async () => {
+    const event = {
+      queryStringParameters: {
+        limit: 10,
+      },
+    } as any;
 
-  //   mockPaymentList.mockRejectedValue(new Error('Unexpected error'));
+    mockPaymentList.mockRejectedValue(new Error('Unexpected error'));
 
-  //   const result = await handler(event);
+    const result = await handler(event);
 
-  //   expect(result.statusCode).toBe(500);
-  //   expect(JSON.parse(result.body)).toEqual({
-  //     message: 'Internal server error'
-  //   });
-  // });
+    expect(result.statusCode).toBe(500);
+    expect(JSON.parse(result.body)).toEqual({
+      message: 'Internal server error'
+    });
+  });
 });

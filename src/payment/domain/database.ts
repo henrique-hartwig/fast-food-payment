@@ -3,7 +3,7 @@ import { Payment } from './entity';
 import { PaymentRepository } from './repository';
 
 export class DbPaymentRepository implements PaymentRepository {
-  private tableName = process.env.TABLE_NAME || `fast-food-payments-db-${process.env.ENVIRONMENT}`;
+  private tableName = process.env.TABLE_NAME;
 
   constructor(private readonly ddb: DynamoDBDocumentClient) {}
 
@@ -21,17 +21,6 @@ export class DbPaymentRepository implements PaymentRepository {
       Key: { id },
     }));
     return result.Item as Payment || null;
-  }
-
-  async findByOrderId(orderId: number): Promise<Payment | null> {
-    const result = await this.ddb.send(new QueryCommand({
-      TableName: this.tableName,
-      IndexName: 'orderId-index',
-      KeyConditionExpression: 'orderId = :orderId',
-      ExpressionAttributeValues: { ':orderId': orderId },
-      Limit: 1,
-    }));
-    return result.Items && result.Items.length > 0 ? result.Items[0] as Payment : null;
   }
 
   async update(payment: Payment): Promise<Payment> {

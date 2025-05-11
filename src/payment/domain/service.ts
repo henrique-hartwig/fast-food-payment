@@ -13,10 +13,6 @@ export class PaymentService {
     return this.payment.findById(id);
   }
 
-  async getPaymentByOrderId(orderId: number): Promise<Payment | null> {
-    return this.payment.findByOrderId(orderId);
-  }
-
   async updatePayment(id: number, paymentData: Partial<Payment>): Promise<Payment> {
     const payment = await this.payment.findById(id);
     if (!payment) {
