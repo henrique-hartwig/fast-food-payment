@@ -1,10 +1,8 @@
 import { z } from 'zod';
 import { PaymentService } from '../../domain/service';
 
-
 const ListPaymentsSchema = z.object({
-  limit: z.number().int().positive().optional(),
-  offset: z.number().int().positive().optional()
+  limit: z.number().int().positive(),
 });
 
 export type ListPaymentsRequest = z.infer<typeof ListPaymentsSchema>;
@@ -15,33 +13,15 @@ export class ListPaymentsController {
   async handle(request: ListPaymentsRequest) {
     try {
       const validatedData = ListPaymentsSchema.parse(request);
-      const payments = await this.paymentService.listPayments(validatedData.limit ?? 10);
+      const payments = await this.paymentService.listPayments(validatedData.limit) as any;
 
-      return {
-        statusCode: 200,
-        body: {
-          message: 'Payments retrieved successfully',
-          data: payments,
-        },
-      };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return {
-          statusCode: 400,
-          body: {
-            message: 'Validation error',
-            details: error.errors,
-          },
-        };
+      if (payments?.error) {
+        throw Error(payments.error);
       }
-      
-      return {
-        statusCode: 500,
-        body: {
-          message: 'Internal server error',
-          details: error,
-        },
-      };
+
+      return payments;
+    } catch (error) {
+      throw error;
     }
   }
 }

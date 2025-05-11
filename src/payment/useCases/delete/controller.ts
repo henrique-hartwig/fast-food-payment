@@ -17,33 +17,15 @@ export class DeletePaymentController {
 
       const payment = await this.paymentService.deletePayment(
         validatedData.id
-      );
+      ) as any;
 
-      return {
-        statusCode: 201,
-        body: {
-          message: 'Payment deleted successfully',
-          data: payment,
-        },
-      };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return {
-          statusCode: 400,
-          body: {
-            message: 'Validation error',
-            details: error.errors,
-          },
-        };
+      if (payment?.error) {
+        throw Error(payment.error);
       }
-      
-      return {
-        statusCode: 500,
-        body: {
-          message: 'Internal server error',
-          details: error,
-        },
-      };
+
+      return payment;
+    } catch (error: any) {
+      throw error;
     }
   }
 }

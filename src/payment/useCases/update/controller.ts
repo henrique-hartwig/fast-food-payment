@@ -1,11 +1,15 @@
 import { z } from 'zod';
 import { PaymentService } from '../../domain/service';
-import { PaymentStatus } from '../../domain/entity';
+import { PaymentMethod, PaymentStatus } from '../../domain/entity';
 
 
 const UpdatePaymentSchema = z.object({
   id: z.number().int().positive(),
-  status: z.nativeEnum(PaymentStatus),
+  paymentData: z.object({
+    status: z.nativeEnum(PaymentStatus),
+    amount: z.number().int().positive(),
+    paymentMethod: z.nativeEnum(PaymentMethod),
+  }),
 });
 
 export type UpdatePaymentRequest = z.infer<typeof UpdatePaymentSchema>;
@@ -19,34 +23,21 @@ export class UpdatePaymentController {
 
       const payment = await this.paymentService.updatePayment(
         validatedData.id,
-        validatedData.status,
-      );
+        {
+          status: validatedData.paymentData.status,
+          amount: validatedData.paymentData.amount,
+          paymentMethod: validatedData.paymentData.paymentMethod,
+        }
+      ) as any;
 
-      return {
-        statusCode: 200,
-        body: {
-          message: 'Payment updated successfully',
-          data: payment,
-        },
-      };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return {
-          statusCode: 400,
-          body: {
-            message: 'Validation error',
-            details: error.errors,
-          },
-        };
+      if (payment?.error) {
+        throw Error(payment.error);
       }
-      
-      return {
-        statusCode: 500,
-        body: {
-          message: 'Internal server error',
-          details: error,
-        },
-      };
+
+      return payment;
+    } catch (error) {
+      console.log('error', error)
+      throw error;
     }
   }
 }

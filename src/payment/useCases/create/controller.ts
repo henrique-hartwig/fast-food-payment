@@ -21,33 +21,15 @@ export class CreatePaymentController {
         validatedData.orderId,
         validatedData.paymentMethod as PaymentMethod,
         validatedData.amount,
-      );
+      ) as any;
 
-      return {
-        statusCode: 201,
-        body: {
-          message: 'Payment created successfully',
-          data: payment,
-        },
-      };
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return {
-          statusCode: 400,
-          body: {
-            message: 'Validation error',
-            details: error.errors,
-          },
-        };
+      if (payment?.error) {
+        throw Error(payment.error);
       }
-      
-      return {
-        statusCode: 500,
-        body: {
-          message: 'Internal server error',
-          details: error,
-        },
-      };
+
+      return payment;
+    } catch (error) {
+      throw error;
     }
   }
 }

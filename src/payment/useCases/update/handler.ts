@@ -9,7 +9,6 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION,
-    endpoint: process.env.DB_HOST,
   });
   const ddb = DynamoDBDocumentClient.from(client);
 
@@ -31,17 +30,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     const result = await paymentController.handle({
       id: Number(paymentId),
-      status: requestData.status,
+      paymentData: requestData,
     });
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result)
+      body: JSON.stringify({
+        message: 'Payment updated successfully',
+        data: result,
+      }),
     };
 
-  } catch (error) {
+  } catch (error: any) {
     logger.error(`Error updating payment`, error);
+
+    if (error?.name === 'ZodError') {
+      return {
+        statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Validation error',
+          details: error.errors,
+        }),
+      };
+    }
+
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },

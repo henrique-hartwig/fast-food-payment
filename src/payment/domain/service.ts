@@ -17,21 +17,14 @@ export class PaymentService {
     return this.payment.findByOrderId(orderId);
   }
 
-  async updatePayment(id: number, status: PaymentStatus): Promise<Payment> {
-    const payment = await this.payment.findByOrderId(id);
+  async updatePayment(id: number, paymentData: Partial<Payment>): Promise<Payment> {
+    const payment = await this.payment.findById(id);
     if (!payment) {
       throw new Error('Payment not found');
     }
-    payment.status = status;
-    return this.payment.update(payment);
-  }
-
-  async updatePaymentStatus(id: number, status: PaymentStatus): Promise<Payment> {
-    const payment = await this.payment.findByOrderId(id);
-    if (!payment) {
-      throw new Error('Payment not found');
-    }
-    payment.status = status;
+    if (paymentData.amount) payment.amount = paymentData.amount;
+    if (paymentData.paymentMethod) payment.paymentMethod = paymentData.paymentMethod;
+    if (paymentData.status) payment.status = paymentData.status;
     return this.payment.update(payment);
   }
 

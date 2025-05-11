@@ -9,20 +9,21 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION,
-    endpoint: process.env.DB_HOST,
   });
   const ddb = DynamoDBDocumentClient.from(client);
   
   try {
-    if (!event.body) {
+    if (!event.queryStringParameters?.limit) {
       return {
         statusCode: 400,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: 'Request body is required' })
+        body: JSON.stringify({ message: 'Query parameters are required' })
       };
     }
 
-    const requestData = JSON.parse(event.body);
+    const requestData = {
+      limit: parseInt(event.queryStringParameters?.limit)
+    };
 
     const paymentRepository = new DbPaymentRepository(ddb);
     const paymentService = new PaymentService(paymentRepository);
@@ -32,11 +33,25 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result)
+      body: JSON.stringify({
+        message: 'Payments retrieved successfully',
+        data: result,
+      }),
     };
-  } catch (error) {
+  } catch (error: any) {
     logger.error(`Error getting payment`, error);
+
+    if (error?.name === 'ZodError') {
+      return {
+        statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Validation error',
+          details: error.errors,
+        }),
+      };
+    }
+
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
