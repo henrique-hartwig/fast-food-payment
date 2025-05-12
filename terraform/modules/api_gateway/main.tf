@@ -39,7 +39,7 @@ resource "aws_lambda_permission" "get_payment" {
   action        = "lambda:InvokeFunction"
   function_name = var.payment_lambdas.get.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api_gateway_arn}/*/*/payment"
+  source_arn    = "${var.api_gateway_arn}/*/*/payment/*"
 }
 
 resource "aws_apigatewayv2_integration" "update_payment" {
@@ -61,7 +61,7 @@ resource "aws_lambda_permission" "update_payment" {
   action        = "lambda:InvokeFunction"
   function_name = var.payment_lambdas.update.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api_gateway_arn}/*/*/payment"
+  source_arn    = "${var.api_gateway_arn}/*/*/payment/*"
 }
 
 resource "aws_apigatewayv2_integration" "delete_payment" {
@@ -83,5 +83,5 @@ resource "aws_lambda_permission" "delete_payment" {
   action        = "lambda:InvokeFunction"
   function_name = var.payment_lambdas.delete.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api_gateway_arn}/*/*/payment"
+  source_arn    = "${var.api_gateway_arn}/*/*/payment/*"
 }
