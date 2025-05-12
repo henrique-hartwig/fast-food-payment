@@ -2,7 +2,7 @@ import { DbPaymentRepository } from '../domain/database';
 import { PaymentGateway, CreatePaymentDTO, PaymentResponse, PaymentStatusResponse } from '../domain/adapter';
 import { PaymentService } from '../domain/service';
 import { UpdatePaymentController } from '../useCases/update/controller';
-import { PaymentStatus } from '../domain/entity';
+import { PaymentMethod, PaymentStatus } from '../domain/entity';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
@@ -63,7 +63,11 @@ export class MercadoPagoGateway implements PaymentGateway {
     
     await updatePaymentController.handle({
         id: Number(paymentId),
-        status: status as PaymentStatus,
+        paymentData: {
+            status: status as PaymentStatus,
+            amount: 0,
+            paymentMethod: PaymentMethod.PIX,
+        },
     });
   }
 }
