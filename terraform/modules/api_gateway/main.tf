@@ -24,7 +24,7 @@ resource "aws_apigatewayv2_integration" "get_payment" {
   api_id                 = var.api_gateway_id
   integration_type       = "AWS_PROXY"
   integration_uri        = var.payment_lambdas.get.invoke_arn
-  integration_method     = "GET"
+  integration_method     = "POST"
   payload_format_version = "2.0"
 }
 
@@ -46,7 +46,7 @@ resource "aws_apigatewayv2_integration" "update_payment" {
   api_id                 = var.api_gateway_id
   integration_type       = "AWS_PROXY"
   integration_uri        = var.payment_lambdas.update.invoke_arn
-  integration_method     = "PUT"
+  integration_method     = "POST"
   payload_format_version = "2.0"
 }
 
@@ -68,7 +68,7 @@ resource "aws_apigatewayv2_integration" "delete_payment" {
   api_id                 = var.api_gateway_id
   integration_type       = "AWS_PROXY"
   integration_uri        = var.payment_lambdas.delete.invoke_arn
-  integration_method     = "DELETE"
+  integration_method     = "POST"
   payload_format_version = "2.0"
 }
 
