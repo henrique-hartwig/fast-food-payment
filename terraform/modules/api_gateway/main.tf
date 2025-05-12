@@ -30,7 +30,7 @@ resource "aws_apigatewayv2_integration" "get_payment" {
 
 resource "aws_apigatewayv2_route" "get_payment" {
   api_id    = var.api_gateway_id
-  route_key = "GET /payment"
+  route_key = "GET /payment/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.get_payment.id}"
 }
 
@@ -52,7 +52,7 @@ resource "aws_apigatewayv2_integration" "update_payment" {
 
 resource "aws_apigatewayv2_route" "update_payment" {
   api_id    = var.api_gateway_id
-  route_key = "PUT /payment"
+  route_key = "PUT /payment/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.update_payment.id}"
 }
 
@@ -74,7 +74,7 @@ resource "aws_apigatewayv2_integration" "delete_payment" {
 
 resource "aws_apigatewayv2_route" "delete_payment" {
   api_id    = var.api_gateway_id
-  route_key = "DELETE /payment"
+  route_key = "DELETE /payment/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.delete_payment.id}"
 }
 
