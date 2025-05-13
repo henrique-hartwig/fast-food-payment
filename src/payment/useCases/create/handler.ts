@@ -17,7 +17,7 @@ export const handler = async (event: SQSEvent | APIGatewayProxyEvent): Promise<a
     if ('Records' in event && event.Records) {
       return await processSQSEvent(event, ddb);
     } 
-    
+
     return await processAPIGatewayEvent(event as APIGatewayProxyEvent, ddb);
   } catch (error: any) {
     logger.error('Error processing payment event', error);
@@ -51,9 +51,10 @@ async function processSQSEvent(event: SQSEvent, ddb: DynamoDBDocumentClient): Pr
 }
 
 async function processAPIGatewayEvent(event: APIGatewayProxyEvent, ddb: DynamoDBDocumentClient): Promise<APIGatewayProxyResult> {
-  if (!event.body) {
-    return {
-      statusCode: 400,
+  try {
+    if (!event.body) {
+      return {
+        statusCode: 400,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: 'Request body is required' })
     };
@@ -74,4 +75,24 @@ async function processAPIGatewayEvent(event: APIGatewayProxyEvent, ddb: DynamoDB
       data: result
     })
   };
-} 
+} catch (error: any) {
+  logger.error(`Error deleting payment`, error);
+
+  if (error?.name === 'ZodError') {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Validation error',
+        details: error.errors,
+      }),
+    };
+  }
+
+  return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Internal server error' })
+    };
+  }
+}
