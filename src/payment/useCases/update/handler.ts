@@ -1,16 +1,19 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { PaymentStatus } from '../../domain/entity';
 import { PaymentService } from '../../domain/service';
 import { DbPaymentRepository } from '../../domain/database';
 import { UpdatePaymentController } from './controller';
 import logger from '../../../utils/logger';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const client = new DynamoDBClient({
     region: process.env.AWS_REGION,
   });
   const ddb = DynamoDBDocumentClient.from(client);
+  const sqs = new SQSClient({ region: 'us-east-1' });
 
   try {
     if (!event.pathParameters?.id || !event.body) {
@@ -32,6 +35,32 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       id: Number(paymentId),
       paymentData: requestData,
     });
+
+    console.log('result', result)
+
+    const sendToProductionQueueUrl = process.env.PRODUCTION_QUEUE_URL;
+    
+    if (result.status === PaymentStatus.PAID) {
+      console.log('sendToProductionQueueUrl', sendToProductionQueueUrl)
+
+      // if (!sendToProductionQueueUrl) {
+      //   throw new Error('PRODUCTION_QUEUE_URL is not set');
+      // }
+      const paymentRequest = {
+        orderId: result.orderId
+      }
+
+      await sqs.send(new SendMessageCommand({
+        QueueUrl: sendToProductionQueueUrl,
+        MessageBody: JSON.stringify(paymentRequest),
+        // MessageAttributes: {
+        //   OrderId: {
+        //     DataType: 'String',
+        //     StringValue: paymentRequest.toString(),
+        //   },
+        // },
+      }));
+    }
 
     return {
       statusCode: 200,

@@ -13,6 +13,11 @@ module "database" {
   environment = var.environment
 }
 
+module "queue" {
+  source      = "./modules/queue"
+  environment = var.environment
+}
+
 module "payment" {
   source = "./modules/lambda/payment"
 
