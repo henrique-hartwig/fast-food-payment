@@ -25,7 +25,7 @@ module "payment" {
   lambda_layers      = [module.lambda_layer.lambda_layer_arn]
   orders_queue_url   = local.orders_queue_url
   orders_queue_arn   = local.orders_queue_arn
-  
+
   tags = {
     Service = "Payment"
   }
