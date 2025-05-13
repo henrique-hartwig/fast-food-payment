@@ -21,15 +21,16 @@ module "queue" {
 module "payment" {
   source = "./modules/lambda/payment"
 
-  environment        = var.environment
-  table_name         = module.database.dynamodb_table_payments_name
-  vpc_id             = local.vpc_id
-  subnet_ids         = local.private_subnet_ids
-  lambda_memory_size = var.lambda_memory_size
-  lambda_timeout     = var.lambda_timeout
-  lambda_layers      = [module.lambda_layer.lambda_layer_arn]
-  orders_queue_url   = local.orders_queue_url
-  orders_queue_arn   = local.orders_queue_arn
+  environment          = var.environment
+  table_name           = module.database.dynamodb_table_payments_name
+  vpc_id               = local.vpc_id
+  subnet_ids           = local.private_subnet_ids
+  lambda_memory_size   = var.lambda_memory_size
+  lambda_timeout       = var.lambda_timeout
+  lambda_layers        = [module.lambda_layer.lambda_layer_arn]
+  orders_queue_url     = local.orders_queue_url
+  orders_queue_arn     = local.orders_queue_arn
+  production_queue_url = module.queue.production_queue_url
 
   tags = {
     Service = "Payment"

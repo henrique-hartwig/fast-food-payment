@@ -63,3 +63,8 @@ variable "orders_queue_arn" {
   description = "Orders queue ARN"
   type        = string
 }
+
+variable "production_queue_url" {
+  description = "Production queue URL"
+  type        = string
+}

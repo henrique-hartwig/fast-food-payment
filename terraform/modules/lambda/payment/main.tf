@@ -67,6 +67,7 @@ resource "aws_lambda_function" "payment_functions" {
       NODE_ENV   = var.environment
       TABLE_NAME = var.table_name
       ORDERS_QUEUE_URL  = var.orders_queue_url
+      PRODUCTION_QUEUE_URL = var.production_queue_url
     }
   }
 

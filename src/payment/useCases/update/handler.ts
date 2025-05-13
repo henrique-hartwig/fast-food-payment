@@ -36,16 +36,9 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       paymentData: requestData,
     });
 
-    console.log('result', result)
-
     const sendToProductionQueueUrl = process.env.PRODUCTION_QUEUE_URL;
     
     if (result.status === PaymentStatus.PAID) {
-      console.log('sendToProductionQueueUrl', sendToProductionQueueUrl)
-
-      // if (!sendToProductionQueueUrl) {
-      //   throw new Error('PRODUCTION_QUEUE_URL is not set');
-      // }
       const paymentRequest = {
         orderId: result.orderId
       }
@@ -53,12 +46,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       await sqs.send(new SendMessageCommand({
         QueueUrl: sendToProductionQueueUrl,
         MessageBody: JSON.stringify(paymentRequest),
-        // MessageAttributes: {
-        //   OrderId: {
-        //     DataType: 'String',
-        //     StringValue: paymentRequest.toString(),
-        //   },
-        // },
       }));
     }
 
