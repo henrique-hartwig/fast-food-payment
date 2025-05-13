@@ -1,9 +1,6 @@
-import { ZodError } from 'zod';
 import { PaymentMethod, PaymentStatus } from '../../../../../src/payment/domain/entity';
 import { handler } from '../../../../../src/payment/useCases/create/handler';
-import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { SQSEvent } from 'aws-lambda';
-import logger from '../../../../../src/utils/logger';
 
 jest.mock('@aws-sdk/client-sqs', () => {
   return {
@@ -61,7 +58,6 @@ describe('Create Payment Lambda', () => {
 
     jest.clearAllMocks();
   });
-
 
   it('should return 400 if no body is sent', async () => {
     const event = { body: null } as any;
