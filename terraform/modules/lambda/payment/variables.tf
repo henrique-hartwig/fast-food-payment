@@ -53,3 +53,13 @@ variable "table_name" {
   description = "Table name"
   type        = string
 }
+
+variable "orders_queue_url" {
+  description = "Orders queue URL"
+  type        = string
+}
+
+variable "orders_queue_arn" {
+  description = "Orders queue ARN"
+  type        = string
+}

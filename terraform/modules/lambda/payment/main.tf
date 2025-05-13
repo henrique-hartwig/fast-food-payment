@@ -66,6 +66,7 @@ resource "aws_lambda_function" "payment_functions" {
     variables = {
       NODE_ENV   = var.environment
       TABLE_NAME = var.table_name
+      ORDERS_QUEUE_URL  = var.orders_queue_url
     }
   }
 
@@ -78,4 +79,11 @@ resource "aws_lambda_function" "payment_functions" {
     Environment = var.environment
     Service     = "payment"
   }
-} 
+}
+
+resource "aws_lambda_event_source_mapping" "payment_queue_mapping" {
+  event_source_arn = var.orders_queue_url
+  function_name    = aws_lambda_function.payment_functions["create"].arn
+  batch_size       = 10  # Número de mensagens processadas por invocação
+  enabled          = true
+}

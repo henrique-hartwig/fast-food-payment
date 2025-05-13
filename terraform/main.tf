@@ -4,6 +4,8 @@ locals {
   private_subnet_ids = data.terraform_remote_state.fastfood_orders.outputs.private_subnet_ids
   api_gateway_id     = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_id
   api_gateway_arn    = data.terraform_remote_state.fastfood_orders.outputs.api_gateway_execution_arn
+  orders_queue_url   = data.terraform_remote_state.fastfood_orders.outputs.fast_food_order_payment_queue_url
+  orders_queue_arn   = data.terraform_remote_state.fastfood_orders.outputs.fast_food_order_payment_queue_arn
 }
 
 module "database" {
@@ -21,6 +23,9 @@ module "payment" {
   lambda_memory_size = var.lambda_memory_size
   lambda_timeout     = var.lambda_timeout
   lambda_layers      = [module.lambda_layer.lambda_layer_arn]
+  orders_queue_url   = local.orders_queue_url
+  orders_queue_arn   = local.orders_queue_arn
+  
   tags = {
     Service = "Payment"
   }

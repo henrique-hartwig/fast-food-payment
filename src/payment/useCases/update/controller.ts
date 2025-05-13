@@ -36,7 +36,6 @@ export class UpdatePaymentController {
 
       return payment;
     } catch (error) {
-      console.log('error', error)
       throw error;
     }
   }
