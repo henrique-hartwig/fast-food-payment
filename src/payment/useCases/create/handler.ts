@@ -34,9 +34,14 @@ async function processSQSEvent(event: SQSEvent, ddb: DynamoDBDocumentClient): Pr
   for (const record of event.Records) {
     try {
       const messageBody = JSON.parse(record.body);
-      logger.info(`Processing payment from queue: ${JSON.stringify(messageBody)}`);
+      const requestData = { 
+        ...messageBody, 
+        paymentMethod: messageBody.paymentMethod || PaymentMethod.PIX 
+      };
+      logger.info(`Processing payment from queue: ${JSON.stringify(requestData)}`);
       
-      await paymentController.handle(messageBody);
+      await paymentController.handle(requestData);
+
       const sqsClient = new SQSClient({ region: process.env.AWS_REGION });
 
       await sqsClient.send(new DeleteMessageCommand({

@@ -75,6 +75,20 @@ describe('List Payment Lambda', () => {
     expect(mockPaymentList).not.toHaveBeenCalled();
   });
 
+  it('should return 400 when limit is not a valid number', async () => {
+    const event = {
+      queryStringParameters: {
+        limit: 'abc',
+      },
+    } as any;
+
+    const result = await handler(event);
+
+    expect(result.statusCode).toBe(400);
+    expect(JSON.parse(result.body).message).toBe('Validation error');
+    expect(mockPaymentList).not.toHaveBeenCalled();
+  });
+
   it('should return 500 when an unexpected error occurs', async () => {
     const event = {
       queryStringParameters: {
