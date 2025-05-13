@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.804.0",
+    "@aws-sdk/client-sqs": "^3.808.0",
     "@aws-sdk/lib-dynamodb": "^3.804.0",
     "winston": "^3.10.0",
     "zod": "^3.22.2"
