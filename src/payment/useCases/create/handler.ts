@@ -6,6 +6,7 @@ import { PaymentService } from '../../domain/service';
 import { DbPaymentRepository } from '../../domain/database';
 import { CreatePaymentController } from './controller';
 import logger from '../../../utils/logger';
+import { PaymentMethod } from '../../domain/entity';
 
 export const handler = async (event: SQSEvent | APIGatewayProxyEvent): Promise<any> => {
   const client = new DynamoDBClient({
@@ -60,7 +61,11 @@ async function processAPIGatewayEvent(event: APIGatewayProxyEvent, ddb: DynamoDB
     };
   }
 
-  const requestData = JSON.parse(event.body);
+  const parsedBody = JSON.parse(event.body);
+  const requestData = { 
+    ...parsedBody, 
+    paymentMethod: parsedBody.paymentMethod || PaymentMethod.PIX 
+  };
 
   const paymentRepository = new DbPaymentRepository(ddb);
   const paymentService = new PaymentService(paymentRepository);

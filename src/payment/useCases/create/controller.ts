@@ -19,7 +19,7 @@ export class CreatePaymentController {
 
       const payment = await this.paymentService.createPayment(
         validatedData.orderId,
-        validatedData.paymentMethod as PaymentMethod || PaymentMethod.PIX,
+        validatedData.paymentMethod as PaymentMethod,
         validatedData.amount,
       ) as any;
 
